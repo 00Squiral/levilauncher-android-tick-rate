@@ -1,0 +1,20 @@
+name: Build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q tick-rate-mode.zip
+      - uses: android-actions/setup-android@v3
+      - run: |
+          sdkmanager "platforms;android-28" "ndk;28.2.13676358"
+          sudo apt-get update && sudo apt-get install -y ninja-build
+      - name: Build
+        shell: pwsh
+        working-directory: levilauncher-android-mod-template-main
+        run: ./scripts/package.ps1 -Abi arm64-v8a
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tick-rate-mode
+          path: levilauncher-android-mod-template-main/build-*/*.levipack
