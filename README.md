@@ -1,0 +1,1 @@
+# levilauncher-android-tick-rate
